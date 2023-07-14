@@ -267,3 +267,5 @@ One should note that Kubernetes Events will be produced when Kyverno detects a v
 In the above hacky script, I am using the `-k` flag to `curl` to ignore TLS trust. If this method were operationalized, one would probably wish to establish proper trust.
 
 There is nothing precluding this concept from working via services external to the cluster, one would need only modify the Kyverno Service or create another which exposes it externally via either a NodePort or LoadBalancer type Service.
+
+Another interesting experiment to conduct would be to see if two Kyverno instances can be run in the same cluster where one is for Kubernetes to use and the other for any arbitrary application. A related test is to only deploy the non-Kubernetes Kyverno in a cluster.
