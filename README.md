@@ -212,7 +212,16 @@ We can execute the script from another Pod running inside the same cluster assum
 
 Look at the final `response` object and note how `response.allowed` is set to `true` indicating that Kyverno said this resource passed the policy definition.
 
-Modify the `cmd.sh` script and produce a violation by changing the value of the `foo` field to something other than `bar`.
+Modify the `cmd.sh` script and produce a violation by changing the value of the `foo` field to something other than `bar`. I'll use `foo: junk` instead.
+
+```bash
+#!/bin/bash
+
+jq --argjson i '{"foo": "junk", "pet": "lemon", "color": "blue"}' '.request.object.spec |= . + $i' boilerplate.json > output.json
+curl -k -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' https://kyverno-svc.kyverno:443/validate/fail --data-binary "@output.json"
+```
+
+Execute the script once again.
 
 ```json
 ./cmd.sh 
@@ -274,7 +283,7 @@ Modify the `cmd.sh` script and produce a violation by changing the value of the 
 }
 ```
 
-The output above has been slightly modified with respect to control characters to ease readibility in this document. Notice the `response` object here with `response.allowed: false`. Kyverno just blocked the request and responded with the same message in the policy.
+The output above has been slightly modified with respect to control characters to ease readibility in this document. Notice the `response` object here has `response.allowed: false` indicating the request is denied. Kyverno just blocked the request and responded with the same message in the policy.
 
 ## Notes
 
