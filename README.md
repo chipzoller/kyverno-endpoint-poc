@@ -69,7 +69,7 @@ On the system/application from which we wish to call into Kyverno, we need to cr
     "kind": "AdmissionReview",
     "apiVersion": "admission.k8s.io/v1",
     "request": {
-        "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+        "uid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
         "kind": {
             "group": "testing.io",
             "version": "v1",
@@ -136,7 +136,7 @@ We can execute the script from another Pod running inside the same cluster assum
   "kind": "AdmissionReview",
   "apiVersion": "admission.k8s.io/v1",
   "request": {
-    "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+    "uid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
     "kind": {
       "group": "testing.io",
       "version": "v1",
@@ -179,7 +179,7 @@ We can execute the script from another Pod running inside the same cluster assum
     "options": null
   },
   "response": {
-    "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+    "uid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
     "allowed": true
   }
 }
@@ -204,7 +204,7 @@ Execute the script once again.
   "kind": "AdmissionReview",
   "apiVersion": "admission.k8s.io/v1",
   "request": {
-    "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+    "uid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
     "kind": {
       "group": "testing.io",
       "version": "v1",
@@ -247,7 +247,7 @@ Execute the script once again.
     "options": null
   },
   "response": {
-    "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+    "uid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
     "allowed": false,
     "status": {
       "metadata": {},
