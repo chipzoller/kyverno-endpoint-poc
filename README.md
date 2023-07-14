@@ -15,13 +15,8 @@ We need a barebones CRD which can serve as the placeholder for the structured da
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
-  generation: 1
   name: myjsons.testing.io
 spec:
-  conversion:
-    strategy: None
   group: testing.io
   names:
     kind: MyJson
@@ -30,37 +25,17 @@ spec:
     singular: myjson
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - jsonPath: .status.validation
-      name: Status
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1
+  - name: v1
     schema:
       openAPIV3Schema:
-        description: Policy is the Schema for the policies API
+        description: This is a boilerplate custom resource used for testing of MyJson resources.
         properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
           spec:
             type: object
             x-kubernetes-preserve-unknown-fields: true
         type: object
     served: true
     storage: true
-    subresources: {}
 ```
 
 Next, we can write a Kyverno policy using its simplistic pattern elements which match on the `MyJson` resource. This simple policy just states that the `foo` field must equal `bar`. In order to process generic JSON, it must be masqueraded as a Kubernetes resource with boilerplate fields such as `apiVersion`, `kind`, `metadata`, and `spec`. The `spec` object will be used as a container to hold the ultimate JSON data our external tool would like to validate.
