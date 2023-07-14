@@ -155,18 +155,123 @@ curl -k -X POST -H 'Content-Type: application/json' -H 'Accept: application/json
 
 We can execute the script from another Pod running inside the same cluster assuming it has network connectivity to Kyverno (i.e., there is no applicable NetworkPolicy restricting its communication). The below output is the result of executing the above script as a file called `cmd.sh`.
 
-```bash
+```json
 ./cmd.sh 
-{"kind":"AdmissionReview","apiVersion":"admission.k8s.io/v1","request":{"uid":"ad484ba0-4346-4b38-8f56-bfa0aaecde34","kind":{"group":"testing.io","version":"v1","kind":"MyJson"},"resource":{"group":"testing.io","version":"v1","resource":"myjsons"},"requestKind":{"group":"testing.io","version":"v1","kind":"MyJson"},"requestResource":{"group":"testing.io","version":"v1","resource":"myjsons"},"name":"testing","namespace":"default","operation":"CREATE","userInfo":{},"object":{"apiVersion":"testing.io/v1","kind":"MyJson","metadata":{"name":"testing","namespace":"default"},"spec":{"color":"blue","pet":"lemon","foo":"bar"}},"oldObject":null,"dryRun":false,"options":null},"response":{"uid":"ad484ba0-4346-4b38-8f56-bfa0aaecde34","allowed":true}}
+{
+  "kind": "AdmissionReview",
+  "apiVersion": "admission.k8s.io/v1",
+  "request": {
+    "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+    "kind": {
+      "group": "testing.io",
+      "version": "v1",
+      "kind": "MyJson"
+    },
+    "resource": {
+      "group": "testing.io",
+      "version": "v1",
+      "resource": "myjsons"
+    },
+    "requestKind": {
+      "group": "testing.io",
+      "version": "v1",
+      "kind": "MyJson"
+    },
+    "requestResource": {
+      "group": "testing.io",
+      "version": "v1",
+      "resource": "myjsons"
+    },
+    "name": "testing",
+    "namespace": "default",
+    "operation": "CREATE",
+    "userInfo": {},
+    "object": {
+      "apiVersion": "testing.io/v1",
+      "kind": "MyJson",
+      "metadata": {
+        "name": "testing",
+        "namespace": "default"
+      },
+      "spec": {
+        "color": "blue",
+        "pet": "lemon",
+        "foo": "bar"
+      }
+    },
+    "oldObject": null,
+    "dryRun": false,
+    "options": null
+  },
+  "response": {
+    "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+    "allowed": true
+  }
+}
 ```
 
-As shown above, the resource passed the policy.
+Look at the final `response` object and note how `response.allowed` is set to `true` indicating that Kyverno said this resource passed the policy definition.
 
 Modify the `cmd.sh` script and produce a violation by changing the value of the `foo` field to something other than `bar`.
 
-```bash
+```json
 ./cmd.sh 
-{"kind":"AdmissionReview","apiVersion":"admission.k8s.io/v1","request":{"uid":"ad484ba0-4346-4b38-8f56-bfa0aaecde34","kind":{"group":"testing.io","version":"v1","kind":"MyJson"},"resource":{"group":"testing.io","version":"v1","resource":"myjsons"},"requestKind":{"group":"testing.io","version":"v1","kind":"MyJson"},"requestResource":{"group":"testing.io","version":"v1","resource":"myjsons"},"name":"testing","namespace":"default","operation":"CREATE","userInfo":{},"object":{"apiVersion":"testing.io/v1","kind":"MyJson","metadata":{"name":"testing","namespace":"default"},"spec":{"color":"blue","pet":"lemon","foo":"junk"}},"oldObject":null,"dryRun":false,"options":null},"response":{"uid":"ad484ba0-4346-4b38-8f56-bfa0aaecde34","allowed":false,"status":{"metadata":{},"status":"Failure","message":"\n\nresource MyJson/default/testing was blocked due to the following policies \n\njson-test:\n  test: 'validation error: The foo field must be set to bar. rule test failed at path\n    /spec/foo/'\n"}}}
+{
+  "kind": "AdmissionReview",
+  "apiVersion": "admission.k8s.io/v1",
+  "request": {
+    "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+    "kind": {
+      "group": "testing.io",
+      "version": "v1",
+      "kind": "MyJson"
+    },
+    "resource": {
+      "group": "testing.io",
+      "version": "v1",
+      "resource": "myjsons"
+    },
+    "requestKind": {
+      "group": "testing.io",
+      "version": "v1",
+      "kind": "MyJson"
+    },
+    "requestResource": {
+      "group": "testing.io",
+      "version": "v1",
+      "resource": "myjsons"
+    },
+    "name": "testing",
+    "namespace": "default",
+    "operation": "CREATE",
+    "userInfo": {},
+    "object": {
+      "apiVersion": "testing.io/v1",
+      "kind": "MyJson",
+      "metadata": {
+        "name": "testing",
+        "namespace": "default"
+      },
+      "spec": {
+        "color": "blue",
+        "pet": "lemon",
+        "foo": "junk"
+      }
+    },
+    "oldObject": null,
+    "dryRun": false,
+    "options": null
+  },
+  "response": {
+    "uid": "ad484ba0-4346-4b38-8f56-bfa0aaecde34",
+    "allowed": false,
+    "status": {
+      "metadata": {},
+      "status": "Failure",
+      "message": "resource MyJson/default/testing was blocked due to the following policies json-test:  test: validation error: The foo field must be set to bar. rule test failed at path /spec/foo/"
+    }
+  }
+}
 ```
 
-Kyverno just blocked the request.
+The output above has been slightly modified with respect to control characters to ease readibility in this document. Notice the `response` object here with `response.allowed: false`. Kyverno just blocked the request and responded with the same message in the policy.
