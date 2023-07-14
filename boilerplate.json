@@ -1,0 +1,52 @@
+{
+    "kind": "AdmissionReview",
+    "apiVersion": "admission.k8s.io/v1",
+    "request": {
+        "uid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+        "kind": {
+            "group": "testing.io",
+            "version": "v1",
+            "kind": "MyJson"
+        },
+        "resource": {
+            "group": "testing.io",
+            "version": "v1",
+            "resource": "myjsons"
+        },
+        "requestKind": {
+            "group": "testing.io",
+            "version": "v1",
+            "kind": "MyJson"
+        },
+        "requestResource": {
+            "group": "testing.io",
+            "version": "v1",
+            "resource": "myjsons"
+        },
+        "name": "testing",
+        "namespace": "default",
+        "operation": "CREATE",
+        "userInfo": null,
+        "roles": null,
+        "clusterRoles": null,
+        "object": {
+            "apiVersion": "testing.io/v1",
+            "kind": "MyJson",
+            "metadata": {
+              "name": "testing",
+              "namespace": "default"
+            },
+            "spec": {
+              "color": "red",
+              "pet": "dog",
+              "foo": "dizzy"
+            }
+          },
+        "oldObject": null,
+        "dryRun": false,
+        "options": null
+    },
+    "oldObject": null,
+    "dryRun": false,
+    "options": null
+}

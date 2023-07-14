@@ -1,0 +1,19 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: json-test
+spec:
+  background: false
+  validationFailureAction: Enforce
+  rules:
+  - name: test
+    match:
+      any:
+      - resources:
+          kinds:
+          - MyJson
+    validate:
+      message: The foo field must be set to bar.
+      pattern:
+        spec:
+          foo: bar

@@ -1,0 +1,9 @@
+apiVersion: testing.io/v1
+kind: MyJson
+metadata:
+  name: testing
+  namespace: default
+spec:
+  color: red
+  pet: dog
+  foo: bad
