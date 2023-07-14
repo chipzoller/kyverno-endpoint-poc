@@ -20,9 +20,7 @@ spec:
   group: testing.io
   names:
     kind: MyJson
-    listKind: MyJsons
     plural: myjsons
-    singular: myjson
   scope: Namespaced
   versions:
   - name: v1
