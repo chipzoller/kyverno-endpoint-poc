@@ -292,3 +292,5 @@ Since these requests/responses do not travel between the Kubernetes API server, 
 One should note that Kubernetes Events will be produced when Kyverno detects a violation. There is currently no way to disable such Events on a per-policy basis.
 
 In the above hacky script, I am using the `-k` flag to `curl` to ignore TLS trust. If this method were operationalized, one would probably wish to establish proper trust.
+
+There is nothing precluding this concept from working via services external to the cluster, one would need only modify the Kyverno Service or create another which exposes it externally via either a NodePort or LoadBalancer type Service.
