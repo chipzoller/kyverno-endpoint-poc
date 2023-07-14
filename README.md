@@ -275,3 +275,9 @@ Modify the `cmd.sh` script and produce a violation by changing the value of the 
 ```
 
 The output above has been slightly modified with respect to control characters to ease readibility in this document. Notice the `response` object here with `response.allowed: false`. Kyverno just blocked the request and responded with the same message in the policy.
+
+## Notes
+
+Since these requests/responses do not travel between the Kubernetes API server, there is no risk of "good" resources being persisted into the cluster.
+
+One should note that Kubernetes Events will be produced when Kyverno detects a violation. There is currently no way to disable such Events on a per-policy basis.
