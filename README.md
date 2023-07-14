@@ -262,7 +262,7 @@ The output above has been slightly modified with respect to control characters t
 
 Since these requests/responses do not travel between the Kubernetes API server, there is no risk of "good" resources being persisted into the cluster.
 
-One should note that Kubernetes Events will be produced when Kyverno detects a violation. There is currently no way to disable such Events on a per-policy basis.
+One should note that Kubernetes Events will be produced when Kyverno detects a violation. Disabling them could be done by setting the flag `--maxQueuedEvents=0` but this will take effect globally.
 
 In the above hacky script, I am using the `-k` flag to `curl` to ignore TLS trust. If this method were operationalized, one would probably wish to establish proper trust.
 
